@@ -83,8 +83,8 @@ export default function Home() {
                   </a>
                 </Link>
                 <a href="tel:603-417-4296">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white/10">
-                    Call: 603-417-4296
+                  <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
+                    603-417-4296
                   </Button>
                 </a>
               </div>

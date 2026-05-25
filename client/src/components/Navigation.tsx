@@ -17,10 +17,10 @@ export default function Navigation() {
 
   return (
     <nav className="bg-background border-b border-border sticky top-0 z-50">
-      <div className="container py-3 md:py-5 flex items-center justify-between">
+      <div className="container py-1 md:py-2 flex items-center justify-between">
         <Link href="/">
           <a className="hover:opacity-80 transition-opacity">
-            <LogoWithText />
+            <LogoWithText className="h-14 w-auto md:h-20" />
           </a>
         </Link>
 

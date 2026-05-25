@@ -53,40 +53,70 @@ export default function Services() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#f5f3ef' }}>
       <Navigation />
 
       <main className="flex-1">
-        <section className="py-12 md:py-16 bg-muted/30">
+        {/* Page Header — deep earthy green-charcoal, inspired by hero image shadow/overlay */}
+        <section
+          className="py-12 md:py-16"
+          style={{ backgroundColor: '#1e2d1e' }}
+        >
           <div className="container animate-fade-in-up">
-            <h1 className="text-foreground mb-4">Professional Landscaping Services</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            {/* Warm off-white / stone — inspired by house facade and walkway in hero */}
+            <h1 className="mb-4" style={{ color: '#f0ece4' }}>
+              Professional Landscaping Services
+            </h1>
+            {/* Soft botanical green — lawn/shrub accent */}
+            <p className="text-lg max-w-2xl" style={{ color: '#8fba8f' }}>
               Comprehensive landscaping solutions for Portsmouth, NH
             </p>
           </div>
         </section>
 
-        <section className="py-16 md:py-20">
+        {/* Service Cards — warm stone/linen background, white cards with premium shadow */}
+        <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f3ef' }}>
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-stagger">
               {services.map((service, idx) => {
                 const Icon = service.icon;
                 return (
-                  <Card key={idx} className="p-6 hover:shadow-lg transition-shadow duration-300 animate-scale-in">
-                    <Icon className="w-10 h-10 text-primary mb-4" />
-                    <h3 className="font-bold text-foreground mb-2 text-lg">{service.title}</h3>
-                    <p className="text-muted-foreground mb-4 text-sm">{service.description}</p>
-                    <ul className="space-y-2 mb-6">
+                  <Card
+                    key={idx}
+                    className="p-8 text-center hover:shadow-xl transition-shadow duration-300 animate-scale-in"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderColor: '#c8d8c0',  /* botanical green border */
+                      boxShadow: '0 2px 12px rgba(30, 45, 30, 0.10)',
+                    }}
+                  >
+                    {/* Deep landscape green icon — pulled from lawn/shrub tones in hero */}
+                    <Icon className="w-12 h-12 mx-auto mb-4" style={{ color: '#3a7a3a' }} />
+                    {/* Dark earthy green-charcoal heading */}
+                    <h3 className="font-bold mb-3 text-lg" style={{ color: '#1e2d1e' }}>
+                      {service.title}
+                    </h3>
+                    {/* Warm muted sage body text */}
+                    <p className="mb-5 text-sm" style={{ color: '#6b7d6b' }}>
+                      {service.description}
+                    </p>
+                    <ul className="space-y-2 mb-6 text-left">
                       {service.benefits.slice(0, 3).map((benefit, i) => (
                         <li key={i} className="flex gap-2 items-start text-sm">
-                          <CheckCircle size={16} className="text-primary flex-shrink-0 mt-0.5" />
-                          <span className="text-muted-foreground">{benefit}</span>
+                          {/* Botanical green checkmark */}
+                          <CheckCircle size={16} className="flex-shrink-0 mt-0.5" style={{ color: '#3a7a3a' }} />
+                          <span style={{ color: '#6b7d6b' }}>{benefit}</span>
                         </li>
                       ))}
                     </ul>
                     <Link href="/contact">
                       <a>
-                        <Button size="sm" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+                        {/* Deep landscape green button — tied to hero lawn palette */}
+                        <Button
+                          size="sm"
+                          className="w-full hover:opacity-90 transition-opacity"
+                          style={{ backgroundColor: '#3a7a3a', color: '#f0ece4' }}
+                        >
                           Get Quote
                         </Button>
                       </a>
@@ -98,17 +128,24 @@ export default function Services() {
           </div>
         </section>
 
-
-
-        <section className="py-16 md:py-20 bg-primary text-primary-foreground">
+        {/* CTA Band — dark earthy green-charcoal, mirrors hero image overlay depth */}
+        <section className="py-16 md:py-20" style={{ backgroundColor: '#1e2d1e' }}>
           <div className="container text-center animate-fade-in-up">
-            <h2 className="text-primary-foreground mb-6">Ready to Get Started?</h2>
-            <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+            {/* Warm stone/off-white heading */}
+            <h2 className="mb-6" style={{ color: '#f0ece4' }}>
+              Ready to Get Started?
+            </h2>
+            <p className="text-lg mb-8 max-w-2xl mx-auto" style={{ color: '#8fba8f' }}>
               Contact us for a free consultation and estimate
             </p>
             <Link href="/contact">
               <a>
-                <Button size="lg" className="bg-primary-foreground hover:bg-primary-foreground/90 text-primary">
+                {/* Botanical green button on dark band */}
+                <Button
+                  size="lg"
+                  className="hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: '#6ba876', color: '#f8faf7' }}
+                >
                   Schedule Consultation
                 </Button>
               </a>

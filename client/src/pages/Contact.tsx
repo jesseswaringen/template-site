@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -22,38 +22,108 @@ export default function Contact() {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFileError('');
+    const newFiles = Array.from(e.target.files ?? []);
+    // Reset the native input so the same file can be re-added after removal
+    e.target.value = '';
+
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const invalid = newFiles.filter(f => !allowed.includes(f.type));
+    if (invalid.length > 0) {
+      setFileError('Only JPG, JPEG, PNG, and WEBP image files are accepted.');
+      return;
+    }
+
+    setSelectedFiles(prev => {
+      // Merge: skip duplicates by name+size, then cap at 5
+      const existing = prev;
+      const merged = [...existing];
+      for (const f of newFiles) {
+        if (merged.length >= 5) break;
+        const isDupe = merged.some(x => x.name === f.name && x.size === f.size);
+        if (!isDupe) merged.push(f);
+      }
+      if (existing.length + newFiles.length > 5 && merged.length === 5) {
+        setFileError(`Maximum 5 photos allowed. ${merged.length - existing.length} photo(s) added; the rest were ignored.`);
+      }
+      return merged;
+    });
+  };
+
+  const removeFile = (index: number) => {
+    setFileError('');
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      toast.success('Thank you for your inquiry! We will be in touch shortly.');
-      setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+
+    // Build FormData manually from controlled state so nothing is missed.
+    // We do NOT use new FormData(form) because the native file input is always
+    // cleared after each selection (to allow re-adding files), so it holds no files.
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('email', formData.email);
+    data.append('phone', formData.phone);
+    data.append('service', formData.service);
+    data.append('message', formData.message);
+
+    // Append each accumulated file from React state
+    selectedFiles.forEach(f => data.append('photos', f, f.name));
+
+    try {
+      const res = await fetch('https://formspree.io/f/xgoqygrj', {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+      if (res.ok) {
+        toast.success('Thank you for your inquiry! We will be in touch shortly.');
+        setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+        setSelectedFiles([]);
+        setFileError('');
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      } else {
+        toast.error('Something went wrong. Please try again or call us directly.');
+      }
+    } catch {
+      toast.error('Network error. Please try again or call us directly.');
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#f5f3ef' }}>
       <Navigation />
 
       <main className="flex-1">
-        <section className="py-12 md:py-16 bg-muted/30">
+        {/* Page header — deep earthy green-charcoal */}
+        <section className="py-12 md:py-16" style={{ backgroundColor: '#1e2d1e' }}>
           <div className="container animate-fade-in-up">
-            <h1 className="text-foreground mb-4">Contact Us</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <h1 className="mb-4" style={{ color: '#f0ece4' }}>Contact Us</h1>
+            <p className="text-lg max-w-2xl" style={{ color: '#8fba8f' }}>
               Get in touch with Seacoast EcoMow for a free estimate
             </p>
           </div>
         </section>
 
-        <section className="py-16 md:py-20">
+        {/* Contact info cards + form — warm stone background */}
+        <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f3ef' }}>
           <div className="container">
+            {/* Info cards row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 animate-stagger">
               {[
                 { icon: Phone, title: 'Phone', value: '603-417-4296', link: 'tel:603-417-4296' },
@@ -63,27 +133,37 @@ export default function Contact() {
               ].map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <Card key={idx} className="p-6 text-center hover:shadow-lg transition-shadow duration-300 animate-scale-in">
-                    <Icon className="w-8 h-8 text-primary mx-auto mb-4" />
-                    <h3 className="font-bold text-foreground mb-2">{item.title}</h3>
+                  <Card
+                    key={idx}
+                    className="p-6 text-center hover:shadow-lg transition-shadow duration-300 animate-scale-in"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderColor: '#c8d8c0',
+                      boxShadow: '0 2px 12px rgba(30,45,30,0.10)',
+                    }}
+                  >
+                    <Icon className="w-8 h-8 mx-auto mb-4" style={{ color: '#3a7a3a' }} />
+                    <h3 className="font-bold mb-2" style={{ color: '#1e2d1e' }}>{item.title}</h3>
                     {item.link.startsWith('tel:') || item.link.startsWith('mailto:') ? (
-                      <a href={item.link} className="text-primary hover:text-primary/80 transition-colors font-medium">
+                      <a href={item.link} className="font-medium transition-colors" style={{ color: '#3a7a3a' }}>
                         {item.value}
                       </a>
                     ) : (
-                      <p className="text-muted-foreground">{item.value}</p>
+                      <p style={{ color: '#6b7d6b' }}>{item.value}</p>
                     )}
                   </Card>
                 );
               })}
             </div>
 
+            {/* Form + sidebar */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Contact form */}
               <div className="animate-fade-in-up">
-                <h2 className="text-foreground mb-8">Send Us a Message</h2>
-                <form action="https://formspree.io/f/xgoqygrj" method="POST" className="space-y-6">
+                <h2 className="mb-8" style={{ color: '#1e2d1e' }}>Send Us a Message to Receive a Quote</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#1e2d1e' }}>
                       Full Name
                     </label>
                     <Input
@@ -95,12 +175,13 @@ export default function Contact() {
                       placeholder="Your name"
                       required
                       className="w-full"
+                      style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                      <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#1e2d1e' }}>
                         Email
                       </label>
                       <Input
@@ -112,10 +193,11 @@ export default function Contact() {
                         placeholder="your@email.com"
                         required
                         className="w-full"
+                        style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
                       />
                     </div>
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
+                      <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#1e2d1e' }}>
                         Phone
                       </label>
                       <Input
@@ -127,12 +209,13 @@ export default function Contact() {
                         placeholder="(603) 555-0000"
                         required
                         className="w-full"
+                        style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="service" className="block text-sm font-medium text-foreground mb-2">
+                    <label htmlFor="service" className="block text-sm font-medium mb-2" style={{ color: '#1e2d1e' }}>
                       Service of Interest
                     </label>
                     <select
@@ -140,7 +223,12 @@ export default function Contact() {
                       name="service"
                       value={formData.service}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a7a3a]"
+                      style={{
+                        border: '1px solid #c8d8c0',
+                        backgroundColor: '#ffffff',
+                        color: '#1e2d1e',
+                      }}
                     >
                       <option value="">Select a service...</option>
                       <option value="lawn-care">Lawn Care & Maintenance</option>
@@ -153,7 +241,7 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                    <label htmlFor="message" className="block text-sm font-medium mb-2" style={{ color: '#1e2d1e' }}>
                       Message
                     </label>
                     <Textarea
@@ -165,47 +253,129 @@ export default function Contact() {
                       required
                       rows={6}
                       className="w-full"
+                      style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
                     />
+                  </div>
+
+                  {/* Photo upload field */}
+                  <div>
+                    <label htmlFor="photos" className="block text-sm font-medium mb-1" style={{ color: '#1e2d1e' }}>
+                      Upload up to 5 photos of your yard or project <span style={{ color: '#6b7d6b' }}>(optional)</span>
+                    </label>
+                    <p className="text-xs mb-3" style={{ color: '#6b7d6b' }}>
+                      Upload pictures of the area you'd like quoted — lawn, beds, hardscape, or any space you want us to work on. This helps us give you a more accurate estimate.
+                    </p>
+                    <div
+                      className="w-full rounded-lg px-4 py-3"
+                      style={{
+                        border: fileError ? '1px dashed #d97373' : '1px dashed #c8d8c0',
+                        backgroundColor: '#f9f8f5',
+                      }}
+                    >
+                      <input
+                        id="photos"
+                        name="photos"
+                        type="file"
+                        accept="image/jpeg,image/jpg,image/png,image/webp"
+                        multiple
+                        onChange={handleFileChange}
+                        className="w-full text-sm cursor-pointer"
+                        style={{ color: '#6b7d6b' }}
+                      />
+                    </div>
+                    {/* Error message */}
+                    {fileError && (
+                      <p className="text-xs mt-1 font-medium" style={{ color: '#d97373' }}>
+                        {fileError}
+                      </p>
+                    )}
+                    {/* Selected file list with remove buttons */}
+                    {selectedFiles.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium mb-1" style={{ color: '#3a7a3a' }}>
+                          {selectedFiles.length} photo{selectedFiles.length > 1 ? 's' : ''} selected:
+                        </p>
+                        <ul className="space-y-1">
+                          {selectedFiles.map((file, i) => (
+                            <li key={i} className="flex items-center justify-between gap-2 text-xs rounded px-2 py-1" style={{ backgroundColor: '#eae7e0' }}>
+                              <span style={{ color: '#6b7d6b' }} className="truncate">• {file.name}</span>
+                              <button
+                                type="button"
+                                onClick={() => removeFile(i)}
+                                className="flex-shrink-0 font-bold hover:opacity-70 transition-opacity"
+                                style={{ color: '#d97373' }}
+                                aria-label={`Remove ${file.name}`}
+                              >
+                                ✕
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                    className="w-full hover:opacity-90 transition-opacity"
+                    style={{ backgroundColor: '#3a7a3a', color: '#f0ece4' }}
                   >
                     {isSubmitting ? 'Sending...' : 'Send Message'}
                   </Button>
                 </form>
               </div>
 
+              {/* Sidebar info cards */}
               <div className="animate-fade-in-up">
-                <h2 className="text-foreground mb-8">Get in Touch</h2>
+                <h2 className="mb-8" style={{ color: '#1e2d1e' }}>Get in Touch</h2>
 
-                <Card className="p-8 mb-8">
-                  <h3 className="font-bold text-foreground mb-4">Business Hours</h3>
-                  <div className="space-y-2 text-muted-foreground">
-                    <p><span className="font-semibold">Monday - Friday:</span> 8:00 AM - 5:00 PM</p>
-                    <p><span className="font-semibold">Saturday:</span> By Appointment</p>
-                    <p><span className="font-semibold">Sunday:</span> Closed</p>
+                <Card
+                  className="p-8 mb-8"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderColor: '#c8d8c0',
+                    boxShadow: '0 2px 12px rgba(30,45,30,0.10)',
+                  }}
+                >
+                  <h3 className="font-bold mb-4" style={{ color: '#1e2d1e' }}>Business Hours</h3>
+                  <div className="space-y-2" style={{ color: '#6b7d6b' }}>
+                    <p><span className="font-semibold" style={{ color: '#1e2d1e' }}>Monday - Friday:</span> 8:00 AM - 5:00 PM</p>
+                    <p><span className="font-semibold" style={{ color: '#1e2d1e' }}>Saturday:</span> By Appointment</p>
+                    <p><span className="font-semibold" style={{ color: '#1e2d1e' }}>Sunday:</span> Closed</p>
                   </div>
                 </Card>
 
-                <Card className="p-8 mb-8">
-                  <h3 className="font-bold text-foreground mb-4">Service Area</h3>
-                  <p className="text-muted-foreground">
+                <Card
+                  className="p-8 mb-8"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderColor: '#c8d8c0',
+                    boxShadow: '0 2px 12px rgba(30,45,30,0.10)',
+                  }}
+                >
+                  <h3 className="font-bold mb-4" style={{ color: '#1e2d1e' }}>Service Area</h3>
+                  <p style={{ color: '#6b7d6b' }}>
                     We proudly serve Portsmouth, NH and surrounding communities including Rye, New Castle, and Greenland.
                   </p>
                 </Card>
 
-                <Card className="p-8">
-                  <h3 className="font-bold text-foreground mb-4">Why Choose Us?</h3>
-                  <ul className="space-y-2 text-muted-foreground text-sm">
-                    <li>✓ Licensed & Insured</li>
-                    <li>✓ Free Estimates</li>
-                    <li>✓ Local Expertise</li>
-                    <li>✓ Eco-Friendly Practices</li>
-                    <li>✓ Professional Team</li>
-                    <li>✓ Responsive Communication</li>
+                <Card
+                  className="p-8"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderColor: '#c8d8c0',
+                    boxShadow: '0 2px 12px rgba(30,45,30,0.10)',
+                  }}
+                >
+                  <h3 className="font-bold mb-4" style={{ color: '#1e2d1e' }}>Why Choose Us?</h3>
+                  <ul className="space-y-2 text-sm" style={{ color: '#6b7d6b' }}>
+                    <li style={{ color: '#3a7a3a' }}>✓ <span style={{ color: '#6b7d6b' }}>Licensed & Insured</span></li>
+                    <li style={{ color: '#3a7a3a' }}>✓ <span style={{ color: '#6b7d6b' }}>Free Estimates</span></li>
+                    <li style={{ color: '#3a7a3a' }}>✓ <span style={{ color: '#6b7d6b' }}>Local Expertise</span></li>
+                    <li style={{ color: '#3a7a3a' }}>✓ <span style={{ color: '#6b7d6b' }}>Eco-Friendly Practices</span></li>
+                    <li style={{ color: '#3a7a3a' }}>✓ <span style={{ color: '#6b7d6b' }}>Professional Team</span></li>
+                    <li style={{ color: '#3a7a3a' }}>✓ <span style={{ color: '#6b7d6b' }}>Responsive Communication</span></li>
                   </ul>
                 </Card>
               </div>
@@ -213,14 +383,19 @@ export default function Contact() {
           </div>
         </section>
 
-        <section className="py-16 md:py-20 bg-primary text-primary-foreground">
+        {/* CTA band — deep earthy green-charcoal */}
+        <section className="py-16 md:py-20" style={{ backgroundColor: '#1e2d1e' }}>
           <div className="container text-center animate-fade-in-up">
-            <h2 className="text-primary-foreground mb-6">Ready to Get Started?</h2>
-            <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+            <h2 className="mb-6" style={{ color: '#f0ece4' }}>Ready to Get Started?</h2>
+            <p className="text-lg mb-8 max-w-2xl mx-auto" style={{ color: '#8fba8f' }}>
               Contact us today for a free consultation
             </p>
             <a href="tel:603-417-4296">
-              <Button size="lg" className="bg-primary-foreground hover:bg-primary-foreground/90 text-primary">
+              <Button
+                size="lg"
+                className="hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: '#6ba876', color: '#f8faf7' }}
+              >
                 Call Now: 603-417-4296
               </Button>
             </a>
