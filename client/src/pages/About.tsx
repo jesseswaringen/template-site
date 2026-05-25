@@ -43,7 +43,7 @@ export default function About() {
         {/* Page header — deep earthy green-charcoal */}
         <section className="py-12 md:py-16" style={{ backgroundColor: '#1e2d1e' }}>
           <div className="container animate-fade-in-up">
-            <h1 className="mb-4" style={{ color: '#f0ece4' }}>About Seacoast EcoMow</h1>
+            <h1 className="mb-4" style={{ color: '#f0ece4' }}>About Lawncrest Outdoor Co.</h1>
             <p className="text-lg max-w-2xl" style={{ color: '#8fba8f' }}>
               Transforming outdoor spaces with professional expertise and environmental responsibility
             </p>
@@ -58,7 +58,7 @@ export default function About() {
                 <h2 className="mb-6" style={{ color: '#1e2d1e' }}>Our Story</h2>
                 <div className="space-y-4" style={{ color: '#6b7d6b' }}>
                   <p>
-                    Seacoast EcoMow was founded on a simple belief: every property deserves professional landscaping that enhances its natural beauty while respecting the environment.
+                    Lawncrest Outdoor Co. was founded on a simple belief: every property deserves professional landscaping that enhances its natural beauty while respecting the environment.
                   </p>
                   <p>
                     Our commitment to excellence drives everything we do. From precision lawn care to artistic landscape designs, we approach every project with dedication to quality.
@@ -71,7 +71,7 @@ export default function About() {
               <div className="h-[400px] rounded-lg overflow-hidden animate-fade-in" style={{ border: '1px solid #c8d8c0', boxShadow: '0 2px 16px rgba(30,45,30,0.12)' }}>
                 <img
                   src="https://d2xsxph8kpxj0f.cloudfront.net/310519663687078477/VFbi5px2obvcB8AMQ4ssEy/hero-lawn-care-7YuXPoGoR6zxi2eqHXEZnf.webp"
-                  alt="Seacoast EcoMow team"
+                  alt="Lawncrest Outdoor Co. team"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -179,13 +179,13 @@ export default function About() {
                   </Button>
                 </a>
               </Link>
-              <a href="tel:603-417-4296">
+              <a href="tel:6034174000">
                 <Button
                   size="lg"
                   className="w-full sm:w-auto hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: '#3a7a3a', color: '#f0ece4' }}
                 >
-                  603-417-4296
+                  603-417-4000
                 </Button>
               </a>
             </div>

@@ -34,7 +34,7 @@ export default function Home() {
   const testimonials = [
     {
       name: 'Sarah Johnson',
-      text: 'Seacoast EcoMow transformed our backyard into a beautiful outdoor living space. Highly professional!',
+      text: 'Lawncrest Outdoor Co. transformed our backyard into a beautiful outdoor living space. Highly professional!',
       rating: 5,
     },
     {
@@ -72,7 +72,7 @@ export default function Home() {
                 Transform Your Outdoor Space with Professional Landscaping
               </h1>
               <p className="text-xl text-white/85 mb-8">
-                Seacoast EcoMow delivers exceptional landscaping services for residential properties throughout Portsmouth, NH. From lawn care to complete landscape design.
+                Lawncrest Outdoor Co. delivers exceptional landscaping services for residential properties throughout Portsmouth, NH. From lawn care to complete landscape design.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/contact">
@@ -82,9 +82,9 @@ export default function Home() {
                     </Button>
                   </a>
                 </Link>
-                <a href="tel:603-417-4296">
+                <a href="tel:6034174000">
                   <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
-                    603-417-4296
+                    603-417-4000
                   </Button>
                 </a>
               </div>
@@ -127,7 +127,7 @@ export default function Home() {
           <div className="container">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="animate-fade-in-up">
-                <h2 className="text-foreground mb-6">Why Choose Seacoast EcoMow?</h2>
+                <h2 className="text-foreground mb-6">Why Choose Lawncrest Outdoor Co.?</h2>
                 <ul className="space-y-4">
                   {[
                     'Licensed and fully insured',
@@ -186,7 +186,7 @@ export default function Home() {
           <div className="container text-center animate-fade-in-up">
             <h2 className="text-primary-foreground mb-6">Ready to Enhance Your Landscape?</h2>
             <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-              Contact Seacoast EcoMow today for a free consultation and estimate. Let's create something beautiful together.
+              Contact Lawncrest Outdoor Co. today for a free consultation and estimate. Let's create something beautiful together.
             </p>
             <Link href="/contact">
               <a>

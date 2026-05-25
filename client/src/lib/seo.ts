@@ -1,37 +1,37 @@
 export const businessInfo = {
-  name: 'Seacoast EcoMow',
+  name: 'Lawncrest Outdoor Co.',
   description: 'Premier landscaping services in Portsmouth, NH',
-  phone: '603-417-4296',
-  email: 'info@seacoastecomow.com',
+  phone: '603-417-4000',
+  email: 'info@lawncrestone.com',
   address: 'Portsmouth, NH',
-  url: 'https://seacoastecomow.com',
-  logo: 'https://seacoastecomow.com/images/logo.png',
+  url: 'https://lawncrestone.com',
+  logo: 'https://lawncrestone.com/images/logo.png',
 };
 
 export const pages = {
   home: {
-    title: 'Seacoast EcoMow | Premier Landscaping in Portsmouth, NH',
+    title: 'Lawncrest Outdoor Co. | Premier Landscaping in Portsmouth, NH',
     description: 'Transform your outdoor space with professional landscaping services in Portsmouth, NH.',
     keywords: 'landscaping Portsmouth NH, lawn care, landscape design',
   },
   services: {
-    title: 'Professional Landscaping Services | Seacoast EcoMow',
+    title: 'Professional Landscaping Services | Lawncrest Outdoor Co.',
     description: 'Comprehensive landscaping services including lawn care, landscape design, hardscaping in Portsmouth, NH.',
     keywords: 'landscaping services Portsmouth, lawn care, landscape design',
   },
   gallery: {
-    title: 'Landscaping Project Gallery | Seacoast EcoMow',
+    title: 'Landscaping Project Gallery | Lawncrest Outdoor Co.',
     description: 'View our portfolio of professional landscaping projects throughout Portsmouth, NH.',
     keywords: 'landscaping projects Portsmouth, landscape gallery',
   },
   about: {
-    title: 'About Seacoast EcoMow | Local Landscaping Company',
-    description: 'Learn about Seacoast EcoMow, a trusted landscaping company serving Portsmouth, NH.',
-    keywords: 'about Seacoast EcoMow, local landscaping company',
+    title: 'About Lawncrest Outdoor Co. | Local Landscaping Company',
+    description: 'Learn about Lawncrest Outdoor Co., a trusted landscaping company serving Portsmouth, NH.',
+    keywords: 'about Lawncrest Outdoor Co., local landscaping company',
   },
   contact: {
-    title: 'Contact Seacoast EcoMow | Free Landscaping Estimate',
-    description: 'Contact Seacoast EcoMow for a free landscaping estimate in Portsmouth, NH.',
+    title: 'Contact Lawncrest Outdoor Co. | Free Landscaping Estimate',
+    description: 'Contact Lawncrest Outdoor Co. for a free landscaping estimate in Portsmouth, NH.',
     keywords: 'contact landscaping Portsmouth, free estimate',
   },
 };

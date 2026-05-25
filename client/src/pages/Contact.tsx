@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+ import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -115,7 +115,7 @@ export default function Contact() {
           <div className="container animate-fade-in-up">
             <h1 className="mb-4" style={{ color: '#f0ece4' }}>Contact Us</h1>
             <p className="text-lg max-w-2xl" style={{ color: '#8fba8f' }}>
-              Get in touch with Seacoast EcoMow for a free estimate
+              Get in touch with Lawncrest Outdoor Co. for a free estimate
             </p>
           </div>
         </section>
@@ -126,8 +126,8 @@ export default function Contact() {
             {/* Info cards row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 animate-stagger">
               {[
-                { icon: Phone, title: 'Phone', value: '603-417-4296', link: 'tel:603-417-4296' },
-                { icon: Mail, title: 'Email', value: 'info@seacoastecomow.com', link: 'mailto:info@seacoastecomow.com' },
+                { icon: Phone, title: 'Phone', value: '603-417-4000', link: 'tel:6034174000' },
+                { icon: Mail, title: 'Email', value: 'info@lawncrestone.com', link: 'mailto:info@lawncrestone.com' },
                 { icon: MapPin, title: 'Service Area', value: 'Portsmouth, NH & Surrounding Areas', link: '#' },
                 { icon: Clock, title: 'Hours', value: 'Mon-Fri: 8AM-5PM', link: '#' },
               ].map((item, idx) => {
@@ -390,13 +390,13 @@ export default function Contact() {
             <p className="text-lg mb-8 max-w-2xl mx-auto" style={{ color: '#8fba8f' }}>
               Contact us today for a free consultation
             </p>
-            <a href="tel:603-417-4296">
+            <a href="tel:6034174000">
               <Button
                 size="lg"
                 className="hover:opacity-90 transition-opacity"
                 style={{ backgroundColor: '#6ba876', color: '#f8faf7' }}
               >
-                Call Now: 603-417-4296
+                Call Now: 603-417-4000
               </Button>
             </a>
           </div>

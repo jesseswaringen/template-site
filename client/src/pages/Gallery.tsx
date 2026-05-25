@@ -129,13 +129,13 @@ export default function Gallery() {
                   Get Your Free Quote
                 </Button>
               </Link>
-              <a href="tel:603-417-4296">
+              <a href="tel:6034174000">
                 <Button
                   size="lg"
                   className="w-full sm:w-auto hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: '#3a7a3a', color: '#f0ece4' }}
                 >
-                  603-417-4296
+                  603-417-4000
                 </Button>
               </a>
             </div>

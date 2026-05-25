@@ -10,7 +10,7 @@ export default function Footer() {
             <div className="mb-4">
               <img
                 src="/images/logo.png"
-                alt="Seacoast EcoMow logo"
+                alt="Lawncrest Outdoor Co. logo"
                 className="h-12 w-auto"
                 style={{ objectFit: 'contain' }}
               />
@@ -36,14 +36,14 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex gap-2 items-start">
                 <Phone size={16} className="text-primary flex-shrink-0 mt-0.5" />
-                <a href="tel:603-417-4296" className="text-muted-foreground hover:text-primary transition-colors">
-                  603-417-4296
+                <a href="tel:6034174000" className="text-muted-foreground hover:text-primary transition-colors">
+                  603-417-4000
                 </a>
               </li>
               <li className="flex gap-2 items-start">
                 <Mail size={16} className="text-primary flex-shrink-0 mt-0.5" />
-                <a href="mailto:info@seacoastecomow.com" className="text-muted-foreground hover:text-primary transition-colors">
-                  info@seacoastecomow.com
+                <a href="mailto:info@lawncrestone.com" className="text-muted-foreground hover:text-primary transition-colors">
+                  info@lawncrestone.com
                 </a>
               </li>
               <li className="flex gap-2 items-start">
@@ -55,7 +55,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2026 Seacoast EcoMow. All rights reserved.</p>
+          <p>&copy; 2026 Lawncrest Outdoor Co. All rights reserved.</p>
         </div>
       </div>
     </footer>

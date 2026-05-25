@@ -32,9 +32,9 @@ export default function Navigation() {
               </a>
             </Link>
           ))}
-          <a href="tel:603-417-4296">
+          <a href="tel:6034174000">
             <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              603-417-4296
+              603-417-4000
             </Button>
           </a>
         </div>
@@ -54,9 +54,9 @@ export default function Navigation() {
                 </a>
               </Link>
             ))}
-            <a href="tel:603-417-4296" className="block">
+            <a href="tel:6034174000" className="block">
               <Button size="sm" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                603-417-4296
+                603-417-4000
               </Button>
             </a>
           </div>
