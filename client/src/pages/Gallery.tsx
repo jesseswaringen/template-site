@@ -41,6 +41,20 @@ export default function Gallery() {
       image: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663687078477/VFbi5px2obvcB8AMQ4ssEy/tree-care-D9QKQZqQ4YZNZyrFH2gm2E.webp',
       description: 'Professional tree pruning',
     },
+    {
+      id: '5',
+      title: 'Landscape Project',
+      category: 'Landscape Design',
+      image: '/images/gallery/gallery-5.png',
+      description: 'Professional landscaping work',
+    },
+    {
+      id: '6',
+      title: 'Outdoor Enhancement',
+      category: 'Hardscaping',
+      image: '/images/gallery/gallery-6.png',
+      description: 'Quality outdoor improvements',
+    },
   ];
 
   const categories = ['All', 'Lawn Care', 'Hardscaping', 'Landscape Design', 'Tree Care'];
