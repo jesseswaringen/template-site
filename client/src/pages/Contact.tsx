@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import AddressAutocomplete from '@/components/AddressAutocomplete';
 import { toast } from 'sonner';
 import { updateMetaTags, pages } from '@/lib/seo';
 
@@ -20,14 +21,48 @@ export default function Contact() {
     phone: '',
     service: '',
     message: '',
+    propertyStreetAddress: '',
+    propertyCity: '',
+    propertyState: '',
+    propertyZipCode: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState('');
 
+  const geoapifyApiKey = import.meta.env.VITE_GEOAPIFY_API_KEY;
+
+  // Debug: Log API key presence (not the actual key)
+  useEffect(() => {
+    console.log('=== Geoapify Debug ===');
+    console.log('API key present:', Boolean(geoapifyApiKey));
+    console.log('API key type:', typeof geoapifyApiKey);
+    if (geoapifyApiKey) {
+      console.log('API key length:', geoapifyApiKey.length);
+      console.log('API key first 10 chars:', geoapifyApiKey.substring(0, 10) + '...');
+    }
+  }, [geoapifyApiKey]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddressSelect = (address: {
+    streetAddress: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    fullAddress: string;
+  }) => {
+    console.log('Contact received address:', address);
+    setFormData(prev => ({
+      ...prev,
+      propertyStreetAddress: address.streetAddress,
+      propertyCity: address.city,
+      propertyState: address.state,
+      propertyZipCode: address.zipCode,
+    }));
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -80,6 +115,30 @@ export default function Contact() {
     data.append('service', formData.service);
     data.append('message', formData.message);
 
+    // Append optional property address fields
+    if (formData.propertyStreetAddress) {
+      data.append('property_street_address', formData.propertyStreetAddress);
+    }
+    if (formData.propertyCity) {
+      data.append('property_city', formData.propertyCity);
+    }
+    if (formData.propertyState) {
+      data.append('property_state', formData.propertyState);
+    }
+    if (formData.propertyZipCode) {
+      data.append('property_zip_code', formData.propertyZipCode);
+    }
+    // Append full address if any component exists
+    if (formData.propertyStreetAddress || formData.propertyCity || formData.propertyState || formData.propertyZipCode) {
+      const fullAddress = [
+        formData.propertyStreetAddress,
+        formData.propertyCity,
+        formData.propertyState,
+        formData.propertyZipCode
+      ].filter(Boolean).join(', ');
+      data.append('property_full_address', fullAddress);
+    }
+
     // Append each accumulated file from React state
     selectedFiles.forEach(f => data.append('photos', f, f.name));
 
@@ -91,7 +150,17 @@ export default function Contact() {
       });
       if (res.ok) {
         toast.success('Thank you for your inquiry! We will be in touch shortly.');
-        setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+        setFormData({ 
+          name: '', 
+          email: '', 
+          phone: '', 
+          service: '', 
+          message: '',
+          propertyStreetAddress: '',
+          propertyCity: '',
+          propertyState: '',
+          propertyZipCode: '',
+        });
         setSelectedFiles([]);
         setFileError('');
         if (fileInputRef.current) fileInputRef.current.value = '';
@@ -255,6 +324,80 @@ export default function Contact() {
                       className="w-full"
                       style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
                     />
+                  </div>
+
+                  {/* Property Address Section (Optional) */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#1e2d1e' }}>
+                      Property Address <span style={{ color: '#6b7d6b' }}>(Optional)</span>
+                    </label>
+                    <p className="text-xs mb-3" style={{ color: '#6b7d6b' }}>
+                      Start typing your property address or enter it manually. This helps us understand where service is needed, but it is not required.
+                    </p>
+                    
+                    {geoapifyApiKey && (
+                      <div className="mb-3">
+                        <AddressAutocomplete 
+                          onAddressSelect={handleAddressSelect}
+                          apiKey={geoapifyApiKey}
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="mb-3">
+                      <Input
+                        id="propertyStreetAddress"
+                        name="propertyStreetAddress"
+                        type="text"
+                        value={formData.propertyStreetAddress}
+                        onChange={handleChange}
+                        placeholder="Street Address"
+                        autoComplete="off"
+                        className="w-full"
+                        style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <Input
+                            id="propertyCity"
+                            name="propertyCity"
+                            type="text"
+                            value={formData.propertyCity}
+                            onChange={handleChange}
+                            placeholder="City"
+                            className="w-full"
+                            style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
+                          />
+                        </div>
+                        <div>
+                          <Input
+                            id="propertyState"
+                            name="propertyState"
+                            type="text"
+                            value={formData.propertyState}
+                            onChange={handleChange}
+                            placeholder="State"
+                            className="w-full"
+                            style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
+                          />
+                        </div>
+                        <div>
+                          <Input
+                            id="propertyZipCode"
+                            name="propertyZipCode"
+                            type="text"
+                            value={formData.propertyZipCode}
+                            onChange={handleChange}
+                            placeholder="ZIP Code"
+                            className="w-full"
+                            style={{ borderColor: '#c8d8c0', backgroundColor: '#ffffff' }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Photo upload field */}
