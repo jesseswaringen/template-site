@@ -16,6 +16,9 @@ importers:
 
   .:
     dependencies:
+      '@geoapify/geocoder-autocomplete':
+        specifier: ^3.0.1
+        version: 3.0.1
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.64.0(react@19.2.1))
@@ -669,6 +672,9 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@geoapify/geocoder-autocomplete@3.0.1':
+    resolution: {integrity: sha512-zCvnDtRZKASUwJ9jNcYn1+g17IlouQQINLov/SkPC5/2e7N8CYkcMqj/SKK1ARvUkvqbFC0rMvvkJa7P6Rme7A==}
 
   '@hookform/resolvers@5.2.2':
     resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
@@ -3853,6 +3859,8 @@ snapshots:
       react-dom: 19.2.1(react@19.2.1)
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@geoapify/geocoder-autocomplete@3.0.1': {}
 
   '@hookform/resolvers@5.2.2(react-hook-form@7.64.0(react@19.2.1))':
     dependencies:
